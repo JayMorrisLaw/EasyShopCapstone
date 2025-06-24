@@ -37,6 +37,7 @@ public class CategoriesController
     }
 
     // add the appropriate annotation for a get action
+    @GetMapping ("{id}")
     public Category getById(@PathVariable int id)
     {
         // get the category by id
@@ -75,7 +76,7 @@ public class CategoriesController
 
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
-    @DeleteMapping
+    @DeleteMapping ("{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(@PathVariable int id)
     {
