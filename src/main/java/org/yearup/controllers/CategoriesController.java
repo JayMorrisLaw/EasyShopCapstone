@@ -49,7 +49,7 @@ public class CategoriesController
     public List<Product> getProductsById(@PathVariable int categoryId)
     {
         // get a list of product by categoryId
-        return null;
+        return productDao.getByCategoryId(categoryId);
     }
 
     // add annotation to call this method for a POST action
@@ -75,8 +75,11 @@ public class CategoriesController
 
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(@PathVariable int id)
     {
         // delete the category by id
+        categoryDao.delete(id);
     }
 }

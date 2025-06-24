@@ -208,6 +208,11 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
         }
     }
 
+    @Override
+    public List<Product> getByCategoryId(int categoryId) {
+        return List.of();
+    }
+
     protected static Product mapRow(ResultSet row) throws SQLException
     {
         int productId = row.getInt("product_id");
