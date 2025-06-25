@@ -47,29 +47,29 @@ public class CategoriesController
 
         if (category == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-        } // looks for category entered and if not found it throws an error 
+        } // looks for category entered and if not found it throws a 404 error
 
         return category;
     }
 
     // the url to return all products in category 1 would look like this
     // https://localhost:8080/categories/1/products
-    @GetMapping("{categoryId}/products")
+    @GetMapping("{categoryId}/products") // gets products that belong to a specific category
     public List<Product> getProductsById(@PathVariable int categoryId)
     {
         // get a list of product by categoryId
-        return productDao.getByCategoryId(categoryId);
+        return productDao.getByCategoryId(categoryId);// calls this method from product DAO to grab products
     }
 
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
-    @PostMapping
+    @PostMapping // post to create a new category
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus (HttpStatus.CREATED)
+    @ResponseStatus (HttpStatus.CREATED)// return 201 if successful
     public Category addCategory(@RequestBody Category category)
     {
         // insert the category
-        return categoryDao.create(category);
+        return categoryDao.create(category);// adds category into database and returns it 
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
