@@ -69,13 +69,13 @@ public class CategoriesController
     public Category addCategory(@RequestBody Category category)
     {
         // insert the category
-        return categoryDao.create(category);// adds category into database and returns it 
+        return categoryDao.create(category);// adds category into database and returns it
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
     @PutMapping("{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')") // only admins can update
     public void updateCategory(@PathVariable int id, @RequestBody Category category)
     {
         // update the category by id
@@ -86,11 +86,11 @@ public class CategoriesController
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
     @DeleteMapping ("{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')") // only admins can delete
+    @ResponseStatus(HttpStatus.NO_CONTENT) // if the request was successful not content is returned because it was deleted
     public void deleteCategory(@PathVariable int id)
     {
         // delete the category by id
-        categoryDao.delete(id);
+        categoryDao.delete(id); // tells DAO to remove the category 
     }
 }
