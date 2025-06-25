@@ -86,6 +86,7 @@ public class ProductsController
         {
             // BUG it was creating instead of updating
             productDao.update(id, product);
+            // productDao.create(id, product); // this is wrong because for put it is supposed to update instead of create
         }
         catch(Exception ex)
         {

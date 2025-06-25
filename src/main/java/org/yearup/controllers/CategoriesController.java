@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
 import org.yearup.models.Category;
@@ -15,9 +16,9 @@ import java.util.List;
 @RestController
 // add the annotation to make this controller the endpoint for the following url
     // http://localhost:8080/categories
-@RequestMapping("/categories")
+@RequestMapping("/categories") // setting URL for all methods
 // add annotation to allow cross site origin requests
-@CrossOrigin
+@CrossOrigin // allows websites to interact with API
 public class CategoriesController
 {
     private CategoryDao categoryDao;
@@ -30,19 +31,25 @@ public class CategoriesController
         this.productDao = productDao;
     }
     // add the appropriate annotation for a get action
-    @GetMapping
+    @GetMapping // method to get requests to categories
     public List<Category> getAll()
     {
         // find and return all categories
-        return categoryDao.getAllCategories();
+        return categoryDao.getAllCategories(); // gets categories from database
     }
 
     // add the appropriate annotation for a get action
-    @GetMapping ("{id}")
+    @GetMapping ("{id}") // gets requests and grabs category by id entered
     public Category getById(@PathVariable int id)
     {
         // get the category by id
-        return categoryDao.getById(id);
+       Category category = categoryDao.getById(id);
+
+        if (category == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+        } // looks for category entered and if not found it throws an error 
+
+        return category;
     }
 
     // the url to return all products in category 1 would look like this
