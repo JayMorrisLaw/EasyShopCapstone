@@ -15,7 +15,7 @@ import java.util.List;
 // add the annotations to make this a REST controller
 @RestController
 // add the annotation to make this controller the endpoint for the following url
-    // http://localhost:8080/categories
+// http://localhost:8080/categories
 @RequestMapping("/categories") // setting URL for all methods
 // add annotation to allow cross site origin requests
 @CrossOrigin // allows websites to interact with API
@@ -31,7 +31,7 @@ public class CategoriesController
         this.productDao = productDao;
     }
     // add the appropriate annotation for a get action
-    @GetMapping // method to get requests to categories
+    @GetMapping // method to get requests from categories
     public List<Category> getAll()
     {
         // find and return all categories
@@ -43,7 +43,7 @@ public class CategoriesController
     public Category getById(@PathVariable int id)
     {
         // get the category by id
-       Category category = categoryDao.getById(id);
+        Category category = categoryDao.getById(id);
 
         if (category == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
@@ -91,6 +91,6 @@ public class CategoriesController
     public void deleteCategory(@PathVariable int id)
     {
         // delete the category by id
-        categoryDao.delete(id); // tells DAO to remove the category 
+        categoryDao.delete(id); // tells DAO to remove the category
     }
 }

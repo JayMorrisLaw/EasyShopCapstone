@@ -21,6 +21,8 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     @Override
     public List<Product> search(Integer categoryId, BigDecimal minPrice, BigDecimal maxPrice, String color)
     {
+    // searches products based on filters
+
         List<Product> products = new ArrayList<>();
         // BUG BELOW IN SQL , query was written incorrectly
         // the sql query was only checking for a max price while comparing the same value
@@ -35,12 +37,14 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 "AND (? = -1 OR price >= ?) " +
                 "AND (? = -1 OR price <= ?) " +
                 "AND (? = '' OR color = ?)";
+        //
 
 
         categoryId = categoryId == null ? -1 : categoryId;
         minPrice = minPrice == null ? new BigDecimal("-1") : minPrice;
         maxPrice = maxPrice == null ? new BigDecimal("-1") : maxPrice;
         color = color == null ? "" : color;
+        // sets defaults for null values
 
         try (Connection connection = getConnection())
         {
@@ -67,14 +71,18 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
 
             statement.setString(7, color);
             statement.setString(8, color);
-
+            // binds placeholders in correct order
             ResultSet row = statement.executeQuery();
+
+
+
 
             while (row.next())
             {
                 Product product = mapRow(row);
                 products.add(product);
             }
+            // looping through rows and mapping to a product then adds to a list
         }
         catch (SQLException e)
         {
@@ -91,6 +99,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
 
         String sql = "SELECT * FROM products " +
                     " WHERE category_id = ? ";
+        // filtering products by categoryID
 
         try (Connection connection = getConnection())
         {
@@ -104,6 +113,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 Product product = mapRow(row);
                 products.add(product);
             }
+            // binds categoryid to the query and adds results to the list
         }
         catch (SQLException e)
         {
@@ -142,7 +152,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     {
 
         String sql = "INSERT INTO products(name, price, category_id, description, color, image_url, stock, featured) " +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";// insert query
 
         try (Connection connection = getConnection())
         {
@@ -168,6 +178,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
 
                     // get the newly inserted category
                     return getById(orderId);
+                    // if the insert worked get the id and return the full product using getbyid
                 }
             }
         }
@@ -225,7 +236,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, productId);
 
-            statement.executeUpdate();
+            statement.executeUpdate();// runs query/deletion
         }
         catch (SQLException e)
         {
@@ -236,6 +247,9 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
     @Override
     // this returns an empty list
     public List<Product> getByCategoryId(int categoryId) {
+
+        // return list.of returns an empty list so instead of using that returned
+        //list by categoryid to get real data
         //return List.of(); returns an empty list = BUG
         return listByCategoryId(categoryId);
         // listbycategoryid method does the query already so i reused it
