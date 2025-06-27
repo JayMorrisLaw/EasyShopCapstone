@@ -43,9 +43,10 @@ The original SQL query only compared the product's price against a **single valu
 ```java
 // ❌ Buggy (Commented Out)
 String sql = "SELECT * FROM products " +
-             "WHERE (category_id = ? OR ? = -1) " +
-             "AND (price <= ? OR ? = -1) " +
-             "AND (color = ? OR ? = '') ";
+                "WHERE (category_id = ? OR ? = -1) " +
+                "AND (price <= ? OR ? = -1) " +
+                "AND (color = ? OR ? = '') ";
+
 ```
 
 **Fix:**
@@ -76,23 +77,17 @@ statement.setString(8, color);
 
 ---
 
-### 2. 🛠️ Fixed Return Bug in `getByCategoryId(...)`
+### 2. 🛠️ Fixed Bug in Products Controller 
 
 **Problem:**
-This method originally returned an empty list regardless of input.
-
+This endpoint was creating instead of updating
 ```java
-// ❌ Incorrect implementation
-return List.of(); // Always returns an empty list
-```
+ productDao.create(id, product); // Wrong: inserts a new product
 
-**Fix:**
-Reused the already functional method `listByCategoryId(int categoryId)` for correct logic.
 
+ ✅ Fixed
 ```java
-// ✅ Corrected implementation
-return listByCategoryId(categoryId);
-```
+productDao.update(id, product); // Correct: updates the existing product
 
 ---
 
