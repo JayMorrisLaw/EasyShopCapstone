@@ -1,4 +1,4 @@
-# Capstone Project - Product Data Access Layer (MySqlProductDao)
+# Capstone Project - Product Data Access Layer MySqlProductDao
 
 ## 📘 Project Overview
 
@@ -126,18 +126,6 @@ CREATE TABLE products (
 * Spring component design using `@Component`.
 
 ---
-
-## 📁 File Structure
-
-```
-src/
-├── org.yearup.models/
-│   └── Product.java
-├── org.yearup.data/
-│   └── ProductDao.java
-├── org.yearup.data.mysql/
-    └── MySqlProductDao.java
-```
 
 ## 📜 License
 

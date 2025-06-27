@@ -25,17 +25,22 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
 
         List<Product> products = new ArrayList<>();
         // BUG BELOW IN SQL , query was written incorrectly
-        // the sql query was only checking for a max price while comparing the same value
-        // to filter between a min and max your query has to check both ranges
        /* String sql = "SELECT * FROM products " +
                 "WHERE (category_id = ? OR ? = -1) " +
+
                 "   AND (price <= ? OR ? = -1) " +
+                // checks if the price is only less or = to a max value and doesnt check for a min value
+                // products of a lower price wont be filtered correctly
+
                 "   AND (color = ? OR ? = '') "; */
         // fixed query
         String sql = "SELECT * FROM products " +
                 "WHERE (? = -1 OR category_id = ?) " +
+
                 "AND (? = -1 OR price >= ?) " +
                 "AND (? = -1 OR price <= ?) " +
+                // this query checks for both minimum and maximum price
+
                 "AND (? = '' OR color = ?)";
 
 
@@ -44,7 +49,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
         maxPrice = maxPrice == null ? new BigDecimal("-1") : maxPrice;
         color = color == null ? "" : color;
         
-        // sets defaults for null values
+        // if the values are null it sets default values
 
         try (Connection connection = getConnection())
         {
@@ -170,10 +175,11 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
             int rowsAffected = statement.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Retrieve the generated keys
-                ResultSet generatedKeys = statement.getGeneratedKeys();
 
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                // Retrieve the generated keys
                 if (generatedKeys.next()) {
+
                     // Retrieve the auto-incremented ID
                     int orderId = generatedKeys.getInt(1);
 

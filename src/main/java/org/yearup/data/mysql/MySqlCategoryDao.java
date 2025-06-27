@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.yearup.data.mysql.MySqlProductDao.mapRow;
 
-@Component
+@Component // bean
 public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
     public MySqlCategoryDao(DataSource dataSource) {
         super(dataSource);
@@ -19,12 +19,12 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
 
     @Override
     public List<Category> getAllCategories() {
-        // gets all categories
-        String sql = "SELECT * FROM categories";
+        // empty list for results
+        String sql = "SELECT * FROM categories"; // get all categories
         List<Category> categories = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery())
+             ResultSet resultSet = statement.executeQuery()) // opens connection and stores results
         {
             while (resultSet.next()) // wjile loop to map each row into a category
             {
@@ -54,6 +54,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
                 {
                     return mapRow(result);
                 }
+                // runs query and returns a mapped category if found
             }
         }
         catch (SQLException e)
@@ -67,7 +68,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
     {
         // create a new category
         String sql = "INSERT INTO categories (name, description) VALUES (?, ?)";
-        // makes new row
+        // makes new category
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
@@ -75,6 +76,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         {
             statement.setString(1, category.getName());
             statement.setString(2, category.getDescription());
+            // sets values from category object into the query
 
             int rows = statement.executeUpdate();
 
@@ -87,6 +89,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
                         int newId = keys.getInt(1);
                         category.setCategoryId(newId);
                         return category;
+                        // if insert is successful it grabs the generated id and sets it in category
                     }
                 }
             }
@@ -129,8 +132,8 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql))
         {
-            stmt.setInt(1, categoryId);
-            stmt.executeUpdate();
+            stmt.setInt(1, categoryId); //sets ID
+            stmt.executeUpdate();// deletes row
         }
         catch (SQLException e)
         {
@@ -143,13 +146,14 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         int categoryId = row.getInt("category_id");
         String name = row.getString("name");
         String description = row.getString("description");
-        // pulls row from the database and builds a new category
+        //  reads fields from resultset
 
         Category category = new Category()
         {{
             setCategoryId(categoryId);
             setName(name);
             setDescription(description);
+            // builds a new category with built in values
         }};
 
         return category;
