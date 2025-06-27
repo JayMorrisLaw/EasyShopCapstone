@@ -1,4 +1,4 @@
-# Capstone Project - Product Data Access Layer MySqlProductDao
+EasyShop Capstone
 
 ## 📘 Project Overview
 
