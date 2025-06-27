@@ -44,7 +44,6 @@ public class CategoriesController
     {
         // get the category by id
         Category category = categoryDao.getById(id);
-
         if (category == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
         } // looks for category entered and if not found it throws a 404 error

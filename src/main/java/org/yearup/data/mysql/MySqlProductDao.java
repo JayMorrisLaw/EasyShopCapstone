@@ -244,16 +244,7 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
         }
     }
 
-    @Override
-    // this returns an empty list
-    public List<Product> getByCategoryId(int categoryId) {
 
-        // return list.of returns an empty list so instead of using that returned
-        //list by categoryid to get real data
-        //return List.of(); returns an empty list = BUG
-        return listByCategoryId(categoryId);
-        // listbycategoryid method does the query already so i reused it
-    }
 
     protected static Product mapRow(ResultSet row) throws SQLException
     {
