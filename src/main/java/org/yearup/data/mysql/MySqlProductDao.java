@@ -37,13 +37,13 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 "AND (? = -1 OR price >= ?) " +
                 "AND (? = -1 OR price <= ?) " +
                 "AND (? = '' OR color = ?)";
-        //
 
 
         categoryId = categoryId == null ? -1 : categoryId;
         minPrice = minPrice == null ? new BigDecimal("-1") : minPrice;
         maxPrice = maxPrice == null ? new BigDecimal("-1") : maxPrice;
         color = color == null ? "" : color;
+        
         // sets defaults for null values
 
         try (Connection connection = getConnection())
